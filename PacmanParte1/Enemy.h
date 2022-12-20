@@ -13,8 +13,8 @@ private:
 	ConsoleUtils::CONSOLE_COLOR background = ConsoleUtils::CONSOLE_COLOR::BLACK;
 public:
 	Enemy(COORD spawn);
-
-	void Logic(Map* pacman_map);
+	// una booleana que me diga si he colisionado con el jugador
+	bool Logic(Map* pacman_map, COORD playerPosition);
 	void Draw();
 
 };

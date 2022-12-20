@@ -5,7 +5,7 @@ Enemy::Enemy(COORD spawn)
 	position = spawn;
 }
 
-void Enemy::Logic(Map* pacman_map)
+bool Enemy::Logic(Map* pacman_map, COORD playerPosition)
 {
 	// generar aleatoriamente 4 direcciones 
 	int dir = rand() % 4;
@@ -28,10 +28,23 @@ void Enemy::Logic(Map* pacman_map)
 	default:
 		break;
 	}
-	if (pacman_map->GetTile(position_new.X, position_new.Y) != Map::MAP_WALL) {
+	//Este es el teleporter
+	if (position_new.X < 0)
+	{
+		position_new.X = pacman_map->Width - 1;
+	}
+	position_new.X %= pacman_map->Width;
+	if (position_new.X < 0)
+	{
+		position_new.X = pacman_map->Height - 1;
+	}
+	position_new.X %= pacman_map->Height;
+	if (pacman_map->GetTile(position_new.X, position_new.Y) != Map::MAP_WALL)
+	{
 		position = position_new;
 	}
 
+	return position.X == playerPosition.X && position.Y == playerPosition.Y;
 }
 
 void Enemy::Draw()
