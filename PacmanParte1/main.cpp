@@ -70,6 +70,7 @@ void Input()
     }
 }
 
+
 void Logic()
 {
     if (win)
