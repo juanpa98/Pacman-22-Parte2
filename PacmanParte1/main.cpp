@@ -113,7 +113,7 @@ void Logic()
             //comprobamos si un enemigo a tocado al jugador
             if (enemigos[i].Logic(&pacman_map, playerPos))
                 //muere el jugador
-                    playerDie = true;
+                playerDie = true;
         }
         //si el jugador muere , vuelve a colocarlomelo en el spawn
         if (playerDie)
@@ -121,7 +121,7 @@ void Logic()
             player_x = pacman_map.spawn_player.X;
             player_y = pacman_map.spawn_player.Y;
         }
-        
+
         int player_y_new = player_y;
         int player_x_new = player_x;
         switch (input)
@@ -164,20 +164,52 @@ void Logic()
             player_points++;
             pacman_map.SetTile(player_x_new, player_y_new, Map::MAP_TILES::MAP_EMPTY);
             break;
+        case Map::MAP_TILES::MAP_POWERUP:
+            player_points += 10;
+            for (size_t i = 0; i < enemigos.size(); i++)
+            {
+                enemigos[i].PowerUpPicked();
+            }
+            pacman_map.SetTile(player_x_new, player_y_new, Map::MAP_TILES::MAP_EMPTY);
+            break;
         }
 
         player_y = player_y_new;
         player_x = player_x_new;
-        if (pacman_map.points <= 0)
+
+
+        for (size_t i = 0; i < enemigos.size(); i++)
         {
-            win = true;
+            Enemy::ENEMY_STATE enemystate = enemigos[i].Logic(&pacman_map, { (short)player_x, (short)player_y });
+            switch (enemystate)
+            {
+            case Enemy::ENEMY_NONE:
+                break;
+            case Enemy::ENEMY_KILLED:
+                player_points = player_points + 50;
+                break;
+           case Enemy::ENEMY_DEAD:
+                
+                player_x = pacman_map.spawn_player.X;
+                player_y = pacman_map.spawn_player.Y;
+                break;
+            }
+            if (pacman_map.points <= 0)
+            {
+                win = true;
+            }
+
+
+
         }
+
+        
     }
 }
-
 void Draw()
 {
-    ConsoleUtils::Console_SetPos(0,0);
+
+    ConsoleUtils::Console_SetPos(0, 0);
     pacman_map.Draw();
     //dibuja los enemigos
     for (size_t i = 0; i < enemigos.size(); i++)
@@ -191,11 +223,11 @@ void Draw()
     ConsoleUtils::Console_ClearCharacter({ 0,(short)pacman_map.Height });
     ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::CYAN);
     std::cout << "Puntuacion actual: " << player_points << " Puntuacion pendiente: " << pacman_map.points << std::endl;
-   //Dibujar fotogramas,deltaTime,Time
+    //Dibujar fotogramas,deltaTime,Time
     std::cout << "Fotogramas: " << TimeManager::getInstance().frameCount << std::endl;
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
     std::cout << "Time: " << TimeManager::getInstance().time << std::endl;
-    
+
     if (win)
     {
         ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
@@ -203,3 +235,5 @@ void Draw()
     }
     TimeManager::getInstance().NextFrame();
 }
+
+

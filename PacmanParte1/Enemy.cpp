@@ -1,15 +1,30 @@
 #include "Enemy.h"
+#include "TimeManager.h"
+#include "Map.h"
 
-Enemy::Enemy(COORD spawn)
+
+Enemy::Enemy()
 {
+	spawn = { 0,0 };
 	position = spawn;
+	direction = { 0,0 };
 }
 
-bool Enemy::Logic(Map* pacman_map, COORD playerPosition)
+Enemy::Enemy(COORD _spawn)
 {
-	// generar aleatoriamente 4 direcciones 
+	spawn = _spawn;
+	position = _spawn;
+	direction = { 0,0 };
+}
+
+
+Enemy::ENEMY_STATE Enemy::Logic(Map* pacman_map, COORD playerPosition)
+{
+	
+
 	int dir = rand() % 4;
 	COORD position_new = position;
+
 	switch (dir)
 	{
 	case 0:
@@ -39,12 +54,48 @@ bool Enemy::Logic(Map* pacman_map, COORD playerPosition)
 		position_new.X = pacman_map->Height - 1;
 	}
 	position_new.X %= pacman_map->Height;
-	if (pacman_map->GetTile(position_new.X, position_new.Y) != Map::MAP_WALL)
+	switch (pacman_map->GetTile(position_new.X, position_new.Y))
 	{
-		position = position_new;
+		case Map::MAP_TILES::MAP_WALL:
+		position_new = position;
+		break;
 	}
 
-	return position.X == playerPosition.X && position.Y == playerPosition.Y;
+	position = position_new;
+	
+	
+	ENEMY_STATE state = ENEMY_STATE::ENEMY_NONE;
+	if (position.X == playerPosition.X && position.Y == playerPosition.Y) 
+	{
+		if (powerup_countdown <= TimeManager::getInstance().time) 
+		{
+			 
+			state = ENEMY_STATE::ENEMY_DEAD;
+			
+	
+		}
+		else {
+			position = spawn;
+			state = ENEMY_STATE::ENEMY_KILLED;
+			
+		
+	
+
+		}
+	}
+	if (powerup_countdown <= TimeManager::getInstance().time)
+	{
+		foreground=foreground_attack;
+	}
+	else {
+		foreground = foreground_powerUp;
+	}
+	return state;
+		
+	
+
+
+
 }
 
 void Enemy::Draw()
@@ -53,4 +104,9 @@ void Enemy::Draw()
 	ConsoleUtils::Console_SetPos(position);
 	ConsoleUtils::Console_SetColor(foreground, background);
 	std::cout << character;
+}
+
+void Enemy::PowerUpPicked()
+{
+	powerup_countdown = TimeManager::getInstance().time + powerup_coiuntdown_time;
 }
