@@ -75,6 +75,7 @@ Enemy::ENEMY_STATE Enemy::Logic(Map* pacman_map, COORD playerPosition)
 	
 		}
 		else {
+
 			position = spawn;
 			state = ENEMY_STATE::ENEMY_KILLED;
 			

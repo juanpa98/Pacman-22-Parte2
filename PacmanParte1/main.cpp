@@ -23,12 +23,14 @@ enum USER_INPUTS { NONE, UP, DOWN, RIGHT, LEFT, QUIT };
 Map pacman_map = Map();
 std::vector<Enemy> enemigos = std::vector <Enemy>();
 char player_char = 'O';
+int player_vidas = 3;
 int player_x = 1;
 int player_y = 1;
 int player_points = 0;
 USER_INPUTS input = USER_INPUTS::NONE;
 bool run = true;
 bool win = false;
+bool loose = false;
 
 int main()
 {
@@ -190,6 +192,7 @@ void Logic()
                 break;
            case Enemy::ENEMY_DEAD:
                 
+                player_vidas = player_vidas - 1;
                 player_x = pacman_map.spawn_player.X;
                 player_y = pacman_map.spawn_player.Y;
                 break;
@@ -197,6 +200,12 @@ void Logic()
             if (pacman_map.points <= 0)
             {
                 win = true;
+            }
+            if (player_vidas ==0){
+
+              
+                loose = true;
+
             }
 
 
@@ -223,6 +232,7 @@ void Draw()
     ConsoleUtils::Console_ClearCharacter({ 0,(short)pacman_map.Height });
     ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::CYAN);
     std::cout << "Puntuacion actual: " << player_points << " Puntuacion pendiente: " << pacman_map.points << std::endl;
+    std::cout << "Vidas actuales: " << player_vidas << std::endl;
     //Dibujar fotogramas,deltaTime,Time
     std::cout << "Fotogramas: " << TimeManager::getInstance().frameCount << std::endl;
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
@@ -233,6 +243,13 @@ void Draw()
         ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::GREEN);
         std::cout << "Has ganado!" << std::endl;
     }
+    if (loose){
+
+        std::cout << "Game Over" << std::endl;
+        exit(1);
+               
+
+        }
     TimeManager::getInstance().NextFrame();
 }
 
