@@ -250,6 +250,7 @@ void Draw()
     }
     if (loose){
 
+        ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::DARK_RED);
         std::cout << "Game Over" << std::endl;
         exit(1);
                
