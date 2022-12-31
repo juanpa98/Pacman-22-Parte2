@@ -3,8 +3,10 @@
 #include "Map.h"
 
 
+
 Enemy::Enemy()
 {
+	
 	spawn = { 0,0 };
 	position = spawn;
 	direction = { 0,0 };

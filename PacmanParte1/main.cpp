@@ -1,6 +1,11 @@
 #include "Enemy.h"
 #include "TimeManager.h"
 #include <vector>
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+
 
 /// <summary>
 /// Sets the needed variables
@@ -51,15 +56,19 @@ void Setup()
     //establecer cuantos enemigos quieres en la partida
     //cambio
     int enemy_count = 0;
+ 
+    
 
     std::cout << "Cuantos enemigos quieres?" << std::endl;
     std::cin >> enemy_count;
+  
+        for (size_t i = 0; i < enemy_count; i++)
+        {
+            //vamos agregando enemigos a la lista
+            enemigos.push_back(Enemy(pacman_map.spawn_enemy));
+            
 
-    for (size_t i = 0; i < enemy_count; i++)
-    {
-        //vamos agregando enemigos a la lista
-        enemigos.push_back(Enemy(pacman_map.spawn_enemy));
-    }
+        }
 
     player_x = pacman_map.spawn_player.X;
     player_y = pacman_map.spawn_player.Y;
@@ -110,19 +119,7 @@ void Logic()
         playerPos.Y = player_y;
         bool playerDie = false;
 
-        for (size_t i = 0; i < enemigos.size(); i++)
-        {
-            //comprobamos si un enemigo a tocado al jugador
-            if (enemigos[i].Logic(&pacman_map, playerPos))
-                //muere el jugador
-                playerDie = true;
-        }
-        //si el jugador muere , vuelve a colocarlomelo en el spawn
-        if (playerDie)
-        {
-            player_x = pacman_map.spawn_player.X;
-            player_y = pacman_map.spawn_player.Y;
-        }
+     
 
         int player_y_new = player_y;
         int player_x_new = player_x;
@@ -225,6 +222,7 @@ void Draw()
     {
         enemigos[i].Draw();
     }
+    /*std::this_thread::sleep_for(std::chrono::seconds(1));*/
 
     ConsoleUtils::Console_SetPos(player_x, player_y);
     ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::DARK_YELLOW);
