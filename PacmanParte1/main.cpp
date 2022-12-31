@@ -235,6 +235,7 @@ void Draw()
     std::cout << "Fotogramas: " << TimeManager::getInstance().frameCount << std::endl;
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
     std::cout << "Time: " << TimeManager::getInstance().time << std::endl;
+   
 
     if (win)
     {
@@ -244,6 +245,7 @@ void Draw()
     if (loose){
 
         ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::DARK_RED);
+
         std::cout << "Game Over!" << std::endl;
         exit(1);
                
