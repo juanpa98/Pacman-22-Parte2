@@ -218,11 +218,11 @@ void Draw()
     ConsoleUtils::Console_SetPos(0, 0);
     pacman_map.Draw();
     //dibuja los enemigos
-   // for (size_t i = 0; i < enemigos.size(); i++)
-    //{
-       // enemigos[i].Draw();
-    //}
-    /*std::this_thread::sleep_for(std::chrono::seconds(1));*/
+    for (size_t i = 0; i < enemigos.size(); i++)
+    {
+        enemigos[i].Draw();
+    }
+    
 
     ConsoleUtils::Console_SetPos(player_x, player_y);
     ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::DARK_YELLOW);
@@ -235,13 +235,7 @@ void Draw()
     std::cout << "Fotogramas: " << TimeManager::getInstance().frameCount << std::endl;
     std::cout << "DeltaTime: " << TimeManager::getInstance().deltaTime << std::endl;
     std::cout << "Time: " << TimeManager::getInstance().time << std::endl;
-    if (TimeManager::getInstance().time >= 10) {
-        for (size_t i = 0; i < enemigos.size(); i++)
-        {
-
-            enemigos[i].Draw();
-        }
-    }
+   
 
     if (win)
     {
