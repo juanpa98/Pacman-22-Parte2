@@ -54,7 +54,7 @@ void Setup()
 
     srand(time(NULL));
     //establecer cuantos enemigos quieres en la partida
-    //cambio
+
     int enemy_count = 0;
  
     
