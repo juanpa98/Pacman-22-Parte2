@@ -222,7 +222,7 @@ void Draw()
     {
         enemigos[i].Draw();
     }
-    /*std::this_thread::sleep_for(std::chrono::seconds(1));*/
+    
 
     ConsoleUtils::Console_SetPos(player_x, player_y);
     ConsoleUtils::Console_SetColor(ConsoleUtils::CONSOLE_COLOR::DARK_YELLOW);
